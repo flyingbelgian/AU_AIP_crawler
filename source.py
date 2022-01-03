@@ -45,14 +45,20 @@ class Source:
           self.pub_cycle = str(row[column])
 
 class HTML(Source):
-  def __init__(self):
+  def __init__(self,temp_path):
     self.getPubDateCycle(self.pub_date_column)
+    self.saveSource(temp_path)
 
-  def saveSource(self):
-    self.html = f"{self.pub_date}_{self.type}_{self.pub_cycle}.html"
+  def saveSource(self,temp_path):
+    self.html = os.path.join(temp_path, f"{self.pub_date}_{self.type}_{self.pub_cycle}.html")
     response = self.getSource(self.url)
     with open(self.html, 'w') as file:
       file.write(response.text)
+
+  def cleanUp(self,temp_path,archive_path):
+    for file_name in os.listdir(temp_path):
+      os.replace(os.path.join(temp_path, file_name), os.path.join(archive_path, file_name))
+    os.rmdir(temp_path)
 
 class DAP(HTML):
   url = 'https://www.airservicesaustralia.com/aip/current/dap/AeroProcChartsTOC.htm'
@@ -60,15 +66,10 @@ class DAP(HTML):
   pub_date_column = 5
 
 class DAPfile(Source):
-  def __init__(self,filename):
+  def __init__(self,filename,temp_path):
       super().__init__()
       url = f"https://www.airservicesaustralia.com/aip/current/dap/{filename}"
       response = self.getSource(url)
-      cwd = os.getcwd()
-      new_folder = "./pdf_source"
-      path = os.path.join(cwd, new_folder)
-      filepath = os.path.join(cwd, new_folder, filename)
-      if not os.path.isdir(path):
-          os.mkdir(path)
+      filepath = os.path.join(temp_path, filename)
       with open(filepath, 'wb') as file:
         file.write(response.content)
