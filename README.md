@@ -12,7 +12,7 @@ Completed:
 Current phase:
 - move all single pdfs to archive folder for future reference
 	Seems to be an issue with the pdf merger not properly closing the files. The last line of cleanup at this stage is supposed to move pdf files from the pdf_temp path to the pdf_raw path, but it generates a windows error saying that the file cannot be moved because it's still open with another process.
-    Looked through the output.py to confirm that the file has a .close() line, but that doesn't appear to fix the problem. Adding a 5 second delay to allow processes to finish didn't help either (was a desperate attempt). Will probably need to generate a stackexchange post to ask for help.	
+    Looked through the output.py to confirm that the file has a .close() line, but that doesn't appear to fix the problem. Adding a 10s second delay to allow processes to finish didn't help either (was a desperate attempt). Will probably need to generate a stackexchange post to ask for help.	
 
 Todos:
 - generate for csv listing all charts per aerodrome per cycle, datecode in filename
