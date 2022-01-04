@@ -1,7 +1,7 @@
-import environment, source, parser, output, time
+import environment, os, output, parser, source, time
 
 # This to be replaced when creating functionality to iterate over list of airports to be processed
-airport = "YORG"
+airport = "YAUR"
 
 ### FOR TESTING ONLY ##############################################################################
 # import os
@@ -29,8 +29,14 @@ dap_data = parser.DAPdata(dap_source.html, dir.paths['listing_current'], dap_sou
 for entry in dap_data.entries:
     pdf = source.DAPfile(entry[1], dir.paths['pdf_temp'])
 
+# Generating the combined pdf
 dap_pdf = output.PdfOut(dap_data.panda, dir.paths['pdf_temp'], dir.paths['pdf_current'], 'DAP', airport, dap_source.pub_date)
-
+   
 # Cleaning up temporary source files that were used in other processes
-dap_source.cleanUp(dir.paths['html_temp'], dir.paths['html_archive'])
-# dap_source.cleanUp(dir.paths['pdf_temp'], dir.paths['pdf_raw'])
+def cleanUp(temp_path,archive_path):
+    for file_name in os.listdir(temp_path):
+        os.replace(os.path.join(temp_path, file_name), os.path.join(archive_path, file_name))
+    os.rmdir(temp_path)
+cleanUp(dir.paths['html_temp'], dir.paths['html_archive'])
+# time.sleep(10)
+cleanUp(dir.paths['pdf_temp'], dir.paths['pdf_raw'])
