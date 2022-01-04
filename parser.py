@@ -1,34 +1,41 @@
 from bs4 import BeautifulSoup as bs
 import datetime as dt
-import pandas
+import pandas, os
 
 
 class DAPdata:
-    def __init__(self,html,pub_date,airport):
+    def __init__(self,html_source,current_path,pub_date,airport):
         self.pub_date = pub_date
-        with open(html, 'r') as file:
+        self.airport = airport
+        self.html = self.getHTML(html_source)
+        self.entries = self.getEntries()
+        self.panda = self.getPanda()
+        self.writeDAPcsv(current_path)
+
+    def getHTML(self,html_source):
+        with open(html_source, 'r') as file:
             source_lines = file.readlines()
         relevant = False
         relevant_lines = []
         for line in source_lines:
             if "</table>" in line:
                 relevant = False
-            if airport in line:
+            if self.airport in line:
                 relevant = True
             if relevant:
                 relevant_lines.append(line)
         relevant_lines.append("</table>")
-        filename = f"{html[:-5]}_{airport}.html"
+        filename = f"{html_source[:-5]}_{self.airport}.html"
         with open(filename, 'w') as file:
             file.writelines(relevant_lines)
         with open(filename, 'r') as file:
-            self.relevant_html = file.read()
-        self.entries = self.getEntries()
+            relevant_html = file.read()
+        return(relevant_html)
 
     def getEntries(self):
         entries = []
-        self.soup = bs(self.relevant_html, 'html.parser')
-        table = self.soup.find('table')
+        soup = bs(self.html, 'html.parser')
+        table = soup.find('table')
         for tr in table.find_all("tr"):
             entry = []
             for td1 in tr.find_all("td"):
@@ -45,8 +52,12 @@ class DAPdata:
             date = dt.datetime.strptime(raw_date, '%d-%b-%Y').date()
             entry.append(date.strftime("%Y%m%d"))
         return entries
-    
-    def writeDAPcsv(self):
+
+    def getPanda(self):
         panda = pandas.DataFrame(self.entries)
         panda.columns = ['Title', 'File', 'Effective', 'DateFormatted']
-        panda.to_csv("current_DAP.csv", index=False, )
+        return panda
+
+    def writeDAPcsv(self,current_path):
+        filename = os.path.join(current_path, f"{self.airport}_DAP_{self.pub_date}.csv")
+        self.panda.to_csv(filename, index=False, )
