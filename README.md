@@ -9,14 +9,14 @@ Datecodes are standardised as YYYYMMDD to allow mathematical evaluation of what 
 Completed:
 - get pdfs combined in single bookmarked pdf, datecode in filename
 - reading csv to process multiple aerodromes
+- get ERSA files for specified aerodromes
+- generate for csv listing all charts per aerodrome per cycle, datecode in filename
+- check if source pdf already exist to save on download bandwidth
 
 Current phase:
-- get ERSA files for specified aerodrome
+- compare current chart dates with last cycle's chart dates and identify which charts have changed from last cycle
 
 Todos:
-- generate for csv listing all charts per aerodrome per cycle, datecode in filename
-- compare current chart dates with last cycle's chart dates and identify which charts have changed from last cycle
 - send email notifying existence of new combined pdf for each cycle
 - email to list which charts have changed
 - attach copy of changed charts to email
-- check if source pdf already exist to save on download bandwidth

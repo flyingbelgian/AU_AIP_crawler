@@ -8,7 +8,7 @@ class PdfOut:
     def __init__(self,panda,temp_path,current_path,type,airport,pub_date):
         self.files = panda['File'].to_list()
         self.bookmarks = panda['Title'].to_list()
-        self.file_out = f"{type}_{airport}_{pub_date}.pdf"
+        self.file_out = f"{airport}_{type}_{pub_date}.pdf"
         self.dir_in = temp_path
         self.dir_out = current_path
         self.writePDF()
