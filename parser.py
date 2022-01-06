@@ -23,6 +23,7 @@ class DAPdata:
             if self.airport in line:
                 relevant = True
             if relevant:
+                line = line.replace("&#47", " ")
                 relevant_lines.append(line)
         relevant_lines.append("</table>")
         filename = f"{html_source[:-5]}_{self.airport}.html"
@@ -30,7 +31,7 @@ class DAPdata:
             file.writelines(relevant_lines)
         with open(filename, 'r') as file:
             relevant_html = file.read()
-        return(relevant_html)
+        return relevant_html
 
     def getEntries(self):
         entries = []
