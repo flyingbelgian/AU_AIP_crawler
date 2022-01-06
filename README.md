@@ -12,6 +12,7 @@ Completed:
 - get ERSA files for specified aerodromes
 - generate for csv listing all charts per aerodrome per cycle, datecode in filename
 - check if source pdf already exist to save on download bandwidth
+- archive files in current... directories to archive prior to creating new files
 
 Current phase:
 - compare current chart dates with last cycle's chart dates and identify which charts have changed from last cycle

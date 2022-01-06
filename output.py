@@ -1,11 +1,9 @@
-import os, fitz
+import os
+import fitz
 
-# ### ONLY FOR TESTING
-# import parser
-# dap_data = parser.DAPdata("20211202_DAP_169.html", "20211202", "YORG")
 
 class PdfOut:
-    def __init__(self,panda,temp_path,current_path,type,airport,pub_date):
+    def __init__(self, panda, temp_path, current_path, type, airport, pub_date):
         self.files = panda['File'].to_list()
         self.bookmarks = panda['Title'].to_list()
         self.file_out = f"{airport}_{type}_{pub_date}.pdf"
