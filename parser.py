@@ -6,6 +6,7 @@ import os
 
 class HTMLtoCSV:
     def __init__(self, type, html_source, current_path, pub_date, airport):
+        self.type = type
         self.pub_date = pub_date
         self.airport = airport
         self.html = self.getHTML(html_source)
@@ -19,8 +20,8 @@ class HTMLtoCSV:
         return panda
 
     def writeDAPcsv(self, current_path, type):
-        filename = os.path.join(current_path, f"{self.airport}_{type}_{self.pub_date}.csv")
-        self.panda.to_csv(filename, index=False, )
+        file_name = os.path.join(current_path, f"{self.airport}_{self.type}_{self.pub_date}.csv")
+        self.panda.to_csv(file_name, index=False, )
 
 
 class DAPdata(HTMLtoCSV):

@@ -1,6 +1,5 @@
-import dap
 import environment
-import ersa
+import update
 
 # Read list of aerodromes to be processed
 with open("aerodromes.csv", 'r') as file:
@@ -13,18 +12,14 @@ paths = environment.Paths()
 paths.archiveFiles(paths.path_dict['listing_current'], paths.path_dict['listing_archive'])
 paths.archiveFiles(paths.path_dict['pdf_current'], paths.path_dict['pdf_archive'])
 
-# Get current DAP files for each of the aerodromes
-_dap = []
+
 for airport in airports:
-    _dap.append(dap.DAP(airport, paths))
-
-# Get current ERSA files for each of the aerodromes
-_ersa = []
-for airport in airports:
-    _ersa.append(ersa.ERSA(airport, paths))
-
-# Compare file listings between previous cycle and current cycle
-
-
-def ComparePublications():
-    pass
+    # Get current DAP files for each of the aerodromes
+    dap_new = update.DAP(airport, paths)
+    # Get current ERSA files for each of the aerodromes
+    ersa_new = update.ERSA(airport, paths)
+    # Get file listing for previous cycle
+    print(paths.getLatestFile('DAP', airport, paths.path_dict['listing_archive']))
+    print(paths.getLatestFile('ERSA', airport, paths.path_dict['listing_archive']))
+    print(paths.getLatestFile('DAP', airport, paths.path_dict['listing_current']))
+    print(paths.getLatestFile('ERSA', airport, paths.path_dict['listing_current']))
