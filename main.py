@@ -1,6 +1,6 @@
 import compare_notify
 import environment
-import update
+
 
 # Read list of aerodromes to be processed
 with open("aerodromes.csv", 'r') as file:
@@ -12,7 +12,6 @@ paths = environment.Paths()
 # # Move previously generated summary files to archive folders
 # paths.archiveFiles(paths.path_dict['listing_current'], paths.path_dict['listing_archive'])
 # paths.archiveFiles(paths.path_dict['pdf_current'], paths.path_dict['pdf_archive'])
-
 
 for airport in airports:
     # # Get current DAP files for each of the aerodromes
@@ -27,8 +26,3 @@ for airport in airports:
 
     compare_dap = compare_notify.Comparison(csv_dap_previous, csv_dap_current)
     compare_ersa = compare_notify.Comparison(csv_ersa_previous, csv_ersa_current)
-
-    print(compare_dap.getDifference())
-    print()
-    print(compare_ersa.getDifference())
-    print()

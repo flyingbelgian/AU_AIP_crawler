@@ -1,0 +1,25 @@
+Following files are different between the previous and current DAP cycles for YTEE.
+                               Effective_x           Effective_y
+Title                                                           
+AERODROME CHART       13-Aug-2020 (Am 164)  13-Aug-2020 (Am 164)
+RNAV-Z (GNSS) RWY 14  13-Aug-2020 (Am 164)  13-Aug-2020 (Am 164)
+New Procedure                          NaN     publication cycle
+
+Following files are different between the previous and current ERSA cycles for YTEE.
+      Effective_x Effective_y
+Title                        
+FAC     02DEC2021   02DEC2021
+RDS     02DEC2021   02DEC2021
+
+Following files are different between the previous and current DAP cycles for YTBB.
+                               Effective_x           Effective_y
+Title                                                           
+AERODROME CHART       23-May-2019 (Am 159)  23-May-2019 (Am 159)
+RNAV-Z (GNSS) RWY 15  23-May-2019 (Am 159)  30-May-2019 (Am 159)
+
+Following files are different between the previous and current ERSA cycles for YTBB.
+      Effective_x Effective_y
+Title                        
+FAC     02DEC2021   02DEC2021
+RDS     02DEC2021   02DEC2021
+

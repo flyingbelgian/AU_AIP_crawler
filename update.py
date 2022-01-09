@@ -38,8 +38,3 @@ class ERSA(Update):
     getSource = source.ERSAhtml
     getListing = parser.ERSAdata
     getFile = source.ERSAfile
-
-
-# dap = DAP
-#
-# dap.getSource('somepath/')
