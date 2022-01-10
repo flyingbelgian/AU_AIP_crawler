@@ -34,6 +34,7 @@ class Paths:
     def getLatestFile(self, type, airport, path):
         list = os.listdir(path)
         if list == []:
+            print("No similar file in archive.")
             return None
         else:
             file_list = [file for file in list if type in file if airport in file]

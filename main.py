@@ -1,5 +1,6 @@
 import compare_notify
 import environment
+import update
 
 
 # Read list of aerodromes to be processed
@@ -24,5 +25,5 @@ for airport in airports:
     csv_dap_current = paths.getLatestFile('DAP', airport, paths.path_dict['listing_current'])
     csv_ersa_current = paths.getLatestFile('ERSA', airport, paths.path_dict['listing_current'])
 
-    compare_dap = compare_notify.Comparison(csv_dap_previous, csv_dap_current)
-    compare_ersa = compare_notify.Comparison(csv_ersa_previous, csv_ersa_current)
+    compare_dap = compare_notify.Comparison('DAP', airport, csv_dap_previous, csv_dap_current)
+    compare_ersa = compare_notify.Comparison('ERSA', airport, csv_ersa_previous, csv_ersa_current)

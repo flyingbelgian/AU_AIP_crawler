@@ -14,27 +14,23 @@ class Comparison:
         self.list_current.set_index('Title', inplace=True)
         # print(self.list_current)
         self.report_lines = []
-        # self.list_difference = self.list_current.compare(self.list_previous, keep_shape=False)
+        self.getDifference()
+        self.appendReport()
 
     def getDifference(self):
         combined_list = self.list_current.merge(self.list_previous, on="Title", how='outer')
-        # combined_list = self.list_current
+        print(combined_list)
         if combined_list.empty:
-            new_line =
-            f"There are no changes in the {self.type} files for {self.airport} this cycle."
+            self.report_lines.append(
+                f"There are no changes in the {self.type} files for {self.airport} this cycle.")
         else:
-            new_line = "Following files are different between the previous and current "
-            new_line += f"{self.type} cycles for {self.airport}.\n"
-            new_line += combined_list.to_string()
-        self.report_lines.append(new_line)
+            self.report_lines.append(
+                "Following files are different between the previous and current ")
+            self.report_lines.append(
+                f"{self.type} cycles for {self.airport}.\n")
         self.report_lines.append("\n\n")
-        if combined_list.empty:
-            new_line =
-            f"There are no changes in the {self.type} files for {self.airport} this cycle."
-        else:
-            new_line = "Following files are different between the previous and current "
-            new_line += f"{self.type} cycles for {self.airport}.\n"
-            new_line += combined_list.to_string()
-        self.report_lines.append(new_line)
-        self.report_lines.append("\n\n")
-        return combined_list
+
+    def appendReport(self):
+        with open("report.txt", 'a') as report_file:
+            for report_line in self.report_lines:
+                report_file.write(report_line)
