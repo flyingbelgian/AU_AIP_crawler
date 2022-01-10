@@ -11,6 +11,7 @@ class Paths:
             "pdf_archive",
             "pdf_current",
             "pdf_archive_raw",
+            "report_archive",
         ]
         self.path_dict = {}
         for path in self.path_names:

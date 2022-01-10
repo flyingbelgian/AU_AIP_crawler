@@ -4,28 +4,20 @@ import fitz
 
 class PdfOut:
     def __init__(self, panda, temp_path, current_path, type, airport, pub_date):
-        self.files = panda['File'].to_list()
-        self.bookmarks = panda['Title'].to_list()
+        self.panda = panda
         self.file_out = f"{airport}_{type}_{pub_date}.pdf"
         self.dir_in = temp_path
         self.dir_out = current_path
         self.writePDF()
 
     def writePDF(self):
-        # Combine individual pdfs into single merged pdf
+        new_toc = []
         composite_pdf = fitz.open()
-        for f in self.files:
-            new_page = fitz.open(os.path.join(self.dir_in, f))
+        for index, row in self.panda.iterrows():
+            new_page = fitz.open(os.path.join(self.dir_in, row.File))
             composite_pdf.insert_pdf(new_page)
             new_page.close()
-        # Generate and implement ToC (bookmarks)
-        new_toc = []
-        page_count = 1
-        for item in self.bookmarks:
-            entry = [1, item, page_count]
-            new_toc.append(entry)
-            page_count += 1
+            new_toc.append((1, row.Title, index + 1))
         composite_pdf.set_toc(new_toc)
-        # Write final pdf to disk
         composite_pdf.save(os.path.join(self.dir_out, self.file_out), deflate=True, garbage=3)
         composite_pdf.close()

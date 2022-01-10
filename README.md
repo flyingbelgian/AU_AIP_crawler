@@ -11,6 +11,10 @@ Required modules (install these with pip install):
 - beautifulsoup4
 - PyMuPDF
 
+USAGE:
+- Ensure AIRAC.csv is up to date
+- List all aerodromes for which updates are required in aerodromes.csv (1 entry per line)
+- List all email address that should receive an alert for updated files in subscribers.csv (1 entry per line)
 
 FUNCTIONS:
     Completed:
@@ -21,11 +25,13 @@ FUNCTIONS:
     - check if source pdf already exist to save on download bandwidth
     - archive files in current... directories to archive prior to creating new files
     - compare current DAP chart dates with last cycle's chart dates and identify which charts have changed from last cycle
+    - send email notifying existence of new/removed/modified DAP charts for each cycle
+    - release first v1.0.0
 
     Current phase:
     - compare current ERSA pages with last cycle's pages and identify which pages have changed from last cycle
 
     Todos:
-    - send email notifying existence of new combined pdf for each cycle
+    - improve formatting of email (especially table listing change)
     - email to list which charts have changed
     - attach copy of changed charts to email
