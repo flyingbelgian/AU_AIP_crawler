@@ -4,8 +4,8 @@ import output
 
 
 class Update:
-    def __init__(self, airport, paths):
-        source_html = self.getSource(paths.path_dict['html_archive'])
+    def __init__(self, airport, airac, paths):
+        source_html = self.getSource(airac, paths.path_dict['html_archive'])
         source_listing = self.getListing(
             self.file_type,
             source_html.html,

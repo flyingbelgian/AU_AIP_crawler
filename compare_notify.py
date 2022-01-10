@@ -5,21 +5,29 @@ import smtplib
 
 
 class Comparison:
-    def __init__(self, type, airport, csv_previous, csv_current, report_path):
+    def __init__(self, type, airport, csv_previous, csv_current, report_path, subscribers):
         self.airport = airport
         self.type = type
         # Read previous file detail listing and remove unneeded information
-        self.list_previous = pandas.read_csv(csv_previous)
-        self.list_previous.drop(columns=['File', 'DateFormatted'], inplace=True)
+        if csv_previous == "na":
+            self.list_previous = pandas.DataFrame(
+                columns=['Title', 'Effective'])
+        else:
+            self.list_previous = pandas.read_csv(csv_previous)
+            self.list_previous.drop(columns=['File', 'DateFormatted'], inplace=True)
         self.list_previous.set_index('Title', inplace=True)
         # Read current file detail listing and remove unneeded information
-        self.list_current = pandas.read_csv(csv_current)
-        self.list_current.drop(columns=['File', 'DateFormatted'], inplace=True)
+        if csv_current == "na":
+            self.list_current = pandas.DataFrame(
+                columns=['Title', 'Effective'])
+        else:
+            self.list_current = pandas.read_csv(csv_current)
+            self.list_current.drop(columns=['File', 'DateFormatted'], inplace=True)
         self.list_current.set_index('Title', inplace=True)
         # Initiate report contents, send email if difference is found
         self.report_lines = []
         if self.getDifference():
-            self.sendReport()
+            self.sendReport(subscribers)
         # Save report for current comparison to reports archive
         self.saveReport(report_path)
 
@@ -28,8 +36,8 @@ class Comparison:
         """ and returns boolean indicating whether or not a difference was found """
         # Merge previous and current listing
         # filtering out only those entries with different effective dates
-        combined_list = self.list_current.merge(
-            self.list_previous, on="Title", how='outer').query('Effective_x != Effective_y')
+        combined_list = self.list_previous.merge(
+            self.list_current, on="Title", how='outer').query('Effective_x != Effective_y')
         # Deal with case where there are no differences
         if combined_list.empty:
             self.report_lines.append(
@@ -60,10 +68,8 @@ class Comparison:
             for report_line in self.report_lines:
                 report_file.write(report_line)
 
-    def sendReport(self):
+    def sendReport(self, subscribers):
         """ Send email with report lines to all addressees in subscriber.csv """
-        with open('subscribers.csv') as file:
-            addressees = file.read().splitlines()
         report_string = "".join(self.report_lines)
         mail_header = f"Subject:Summary of changes for {self.airport} {self.type} files\n\n"
         message = mail_header + report_string
@@ -74,6 +80,6 @@ class Comparison:
         connection.login(user=my_email, password=my_password)
         connection.sendmail(
             from_addr=my_email,
-            to_addrs=addressees,
+            to_addrs=subscribers,
             msg=message)
         connection.close()

@@ -3,7 +3,10 @@ import os
 
 class Paths:
     def __init__(self):
-        self.cwd = os.getcwd()
+        self.root_path = "C:/GitHub/Crawler_Output"  # Change this line to local folder
+        self.aerodromes = os.path.join(self.root_path, "aerodromes.csv")
+        self.airac = os.path.join(self.root_path, "AIRAC.csv")
+        self.subscribers = os.path.join(self.root_path, "subscribers.csv")
         self.path_names = [
             "html_archive",
             "listing_archive",
@@ -20,7 +23,7 @@ class Paths:
 
     def addPath(self, path_name):
         """ Checks to see if required directory exists, creates it if it doesn't exist """
-        full_path = os.path.join(self.cwd, path_name)
+        full_path = os.path.join(self.root_path, path_name)
         if not os.path.isdir(full_path):
             os.mkdir(full_path)
         return [path_name, full_path]
@@ -36,7 +39,7 @@ class Paths:
         list = os.listdir(path)
         if list == []:
             print("No similar file in archive.")
-            return None
+            return "na"
         else:
             file_list = [file for file in list if type in file if airport in file]
             file_list.sort(reverse=True)

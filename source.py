@@ -37,16 +37,13 @@ class Source:
 
 
 class HTML(Source):
-    def getPubDateCycle(self, column):
+    def getPubDateCycle(self, airac, column):
         '''Retrieves the relevant publication date of the source, based on current time and published publication schedule'''
         '''See readme.md for more information'''
-        with open("AIRAC.csv", 'r') as file:
-            airac_dates = csv.reader(file)
-            next(airac_dates)
-            for row in airac_dates:
-                if int(row[1]) < int(self.source_date) and row[column] != '':
-                    self.pub_date = str(row[1])
-                    self.pub_cycle = str(row[column])
+        for row in airac:
+            if int(row[1]) < int(self.source_date) and row[column] != '':
+                self.pub_date = str(row[1])
+                self.pub_cycle = str(row[column])
 
     def saveSource(self, path):
         filename = f"{self.pub_date}_{self.type}_{self.pub_cycle}.html"
@@ -60,11 +57,11 @@ class HTML(Source):
 
 
 class DAPhtml(HTML):
-    def __init__(self, path):
+    def __init__(self, airac, path):
         self.path = path
         self.type = "DAP"
         self.pub_cycle_column = 5
-        self.getPubDateCycle(self.pub_cycle_column)
+        self.getPubDateCycle(airac, self.pub_cycle_column)
         self.url = "https://www.airservicesaustralia.com/aip/current/dap/AeroProcChartsTOC.htm"
         self.saveSource(self.path)
 
@@ -82,10 +79,10 @@ class DAPfile(Source):
 
 
 class ERSAhtml(HTML):
-    def __init__(self, path):
+    def __init__(self, airac, path):
         self.type = "ERSA"
         self.pub_cycle_column = 4
-        self.getPubDateCycle(self.pub_cycle_column)
+        self.getPubDateCycle(airac, self.pub_cycle_column)
         self.url = f"https://www.airservicesaustralia.com/aip/aip.asp?pg=40&vdate={self.pub_cycle}&ver=1"
         self.saveSource(path)
 
