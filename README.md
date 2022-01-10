@@ -17,21 +17,21 @@ USAGE:
 - List all email address that should receive an alert for updated files in subscribers.csv (1 entry per line)
 
 FUNCTIONS:
-    Completed:
-    - get pdfs combined in single bookmarked pdf, datecode in filename
-    - reading csv to process multiple aerodromes
-    - get ERSA files for specified aerodromes
-    - generate for csv listing all charts per aerodrome per cycle, datecode in filename
-    - check if source pdf already exist to save on download bandwidth
-    - archive files in current... directories to archive prior to creating new files
-    - compare current DAP chart dates with last cycle's chart dates and identify which charts have changed from last cycle
-    - send email notifying existence of new/removed/modified DAP charts for each cycle
-    - release first v1.0.0
+Completed:
+ - get pdfs combined in single bookmarked pdf, datecode in filename
+ - reading csv to process multiple aerodromes
+ - get ERSA files for specified aerodromes
+ - generate for csv listing all charts per aerodrome per cycle, datecode in filename
+ - check if source pdf already exist to save on download bandwidth
+ - archive files in current... directories to archive prior to creating new files
+ - compare current DAP chart dates with last cycle's chart dates and identify which charts have changed from last cycle
+ - send email notifying existence of new/removed/modified DAP charts for each cycle
+ - release first v1.0.0
 
-    Current phase:
-    - compare current ERSA pages with last cycle's pages and identify which pages have changed from last cycle
+Current phase:
+ - compare current ERSA pages with last cycle's pages and identify which pages have changed from last cycle
 
-    Todos:
-    - improve formatting of email (especially table listing change)
-    - email to list which charts have changed
-    - attach copy of changed charts to email
+Todos:
+ - improve formatting of email (especially table listing change)
+ - email to list which charts have changed
+ - attach copy of changed charts to email
