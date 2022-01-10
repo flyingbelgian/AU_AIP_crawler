@@ -26,4 +26,4 @@ for airport in airports:
     csv_ersa_current = paths.getLatestFile('ERSA', airport, paths.path_dict['listing_current'])
 
     compare_dap = compare_notify.Comparison('DAP', airport, csv_dap_previous, csv_dap_current)
-    compare_ersa = compare_notify.Comparison('ERSA', airport, csv_ersa_previous, csv_ersa_current)
+    # compare_ersa = compare_notify.Comparison('ERSA', airport, csv_ersa_previous, csv_ersa_current)

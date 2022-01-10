@@ -20,9 +20,10 @@ FUNCTIONS:
     - generate for csv listing all charts per aerodrome per cycle, datecode in filename
     - check if source pdf already exist to save on download bandwidth
     - archive files in current... directories to archive prior to creating new files
+    - compare current DAP chart dates with last cycle's chart dates and identify which charts have changed from last cycle
 
     Current phase:
-    - compare current chart dates with last cycle's chart dates and identify which charts have changed from last cycle
+    - compare current ERSA pages with last cycle's pages and identify which pages have changed from last cycle
 
     Todos:
     - send email notifying existence of new combined pdf for each cycle
