@@ -7,9 +7,13 @@ Time checks assume an irrelevant time-zone difference in terms of days when the 
 Datecodes are standardised as YYYYMMDD to allow mathematical evaluation of what data is latest and what is the previous data.
 
 Required modules (install these with pip install):
-- requests
 - beautifulsoup4
+- csv
+- datetime
+- os
+- pandas
 - PyMuPDF
+- requests
 
 USAGE:
 - Ensure AIRAC.csv is up to date
@@ -35,6 +39,7 @@ Current phase:
  - compare current ERSA pages with last cycle's pages and identify which pages have changed from last cycle
 
 Todos:
- - improve formatting of email (especially table listing change)
+ - fix bookmarks in ERSA pages (currently always shows RDS as page 2 (based on list index))
+ - improve formatting of email (especially table listing change, i.e. include html tags)
  - email to list which charts have changed
  - attach copy of changed charts to email

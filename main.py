@@ -13,7 +13,7 @@ print("Reading aerodrome names")
 with open(paths.aerodromes, 'r') as file:
     airports = file.read().splitlines()
 # Read list of airac dates and cycles
-print("Readig AIRAC cycle dates")
+print("Reading AIRAC cycle dates")
 with open(paths.airac, 'r') as file:
     airac_source = csv.reader(file)
     next(airac_source)
