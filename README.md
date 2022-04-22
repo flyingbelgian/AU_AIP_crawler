@@ -39,6 +39,7 @@ Current phase:
  - compare current ERSA pages with last cycle's pages and identify which pages have changed from last cycle
 
 Todos:
+ - add counter when downloading files so user has sense of progress
  - fix bookmarks in ERSA pages (currently always shows RDS as page 2 (based on list index))
  - improve formatting of email (especially table listing change, i.e. include html tags)
  - email to list which charts have changed
