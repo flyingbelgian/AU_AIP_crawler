@@ -40,7 +40,8 @@ Current phase:
 
 Todos:
  - add counter when downloading files so user has sense of progress
+ - better handling of new aerodromes (where there are no previous files to archive)
+ - allow for checking both current and pending, or choose when running app
  - fix bookmarks in ERSA pages (currently always shows RDS as page 2 (based on list index))
  - improve formatting of email (especially table listing change, i.e. include html tags)
- - email to list which charts have changed
  - attach copy of changed charts to email
