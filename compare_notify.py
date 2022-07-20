@@ -83,3 +83,4 @@ class Comparison:
         #     to_addrs=subscribers,
         #     msg=message)
         # connection.close()
+        pass
