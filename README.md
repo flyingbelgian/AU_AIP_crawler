@@ -34,14 +34,18 @@ Completed:
  - release first v1.0.0
  - made allowances for files and parameters to be stored in folder other than script root
  - release v1.0.1
+ - script can run independent of location (reads cwd to find related files)
+ - added counter showing filenames as they're being downloaded
+ - disabled email notification due to problem with automated gmail login
+ - fixed list index error when no previous files exist for an AD
+ - release v1.0.2
 
 Current phase:
- - compare current ERSA pages with last cycle's pages and identify which pages have changed from last cycle
-
+ 
 Todos:
- - add counter when downloading files so user has sense of progress
- - better handling of new aerodromes (where there are no previous files to archive)
+ - add counter (current vs total) when downloading files so user has sense of progress
  - allow for checking both current and pending, or choose when running app
+ - compare current ERSA pages with last cycle's pages and identify which pages have changed from last cycle
  - fix bookmarks in ERSA pages (currently always shows RDS as page 2 (based on list index))
  - improve formatting of email (especially table listing change, i.e. include html tags)
  - attach copy of changed charts to email
