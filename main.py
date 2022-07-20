@@ -39,6 +39,7 @@ for airport in airports:
     print(f"Reading previous file listings for {airport}")
     csv_dap_previous = paths.getLatestFile('DAP', airport, paths.path_dict['listing_archive'])
     csv_ersa_previous = paths.getLatestFile('ERSA', airport, paths.path_dict['listing_archive'])
+    # Get file listing for current cycle
     print(f"Reading current file listings for {airport}")
     csv_dap_current = paths.getLatestFile('DAP', airport, paths.path_dict['listing_current'])
     csv_ersa_current = paths.getLatestFile('ERSA', airport, paths.path_dict['listing_current'])

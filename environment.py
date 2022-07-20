@@ -3,7 +3,7 @@ import os
 
 class Paths:
     def __init__(self):
-        self.root_path = "C:/GitHub/Crawler_Output"  # Change this line to local folder
+        self.root_path = os.getcwd()
         self.aerodromes = os.path.join(self.root_path, "aerodromes.csv")
         self.airac = os.path.join(self.root_path, "AIRAC.csv")
         self.subscribers = os.path.join(self.root_path, "subscribers.csv")
@@ -36,12 +36,12 @@ class Paths:
             os.replace(current, archive)
 
     def getLatestFile(self, type, airport, path):
-        list = os.listdir(path)
-        if list == []:
-            print("No similar file in archive.")
+        file_list = [file for file in os.listdir(path) if type in file if airport in file]
+        if file_list == []:
+            print("No relevant file(s) in archive.")
             return "na"
         else:
-            file_list = [file for file in list if type in file if airport in file]
             file_list.sort(reverse=True)
             file_path = os.path.join(path, file_list[0])
             return file_path
+     

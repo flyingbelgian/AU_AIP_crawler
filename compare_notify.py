@@ -32,8 +32,8 @@ class Comparison:
         self.saveReport(report_path)
 
     def getDifference(self):
-        """ Compares current listing with previous listing, populates lines to generate a report """
-        """ and returns boolean indicating whether or not a difference was found """
+        # Compares current listing with previous listing, populates lines to generate a report
+        # and returns boolean indicating whether or not a difference was found
         # Merge previous and current listing
         # filtering out only those entries with different effective dates
         combined_list = self.list_previous.merge(
@@ -60,7 +60,7 @@ class Comparison:
         return different
 
     def saveReport(self, path):
-        """ Print report lines to text file in report archive folder """
+        # Print report lines to text file in report archive folder
         date = dt.date.today().strftime("%Y%m%d")
         file_name = f"report{date}.txt"
         file_path = os.path.join(path, file_name)
@@ -69,17 +69,17 @@ class Comparison:
                 report_file.write(report_line)
 
     def sendReport(self, subscribers):
-        """ Send email with report lines to all addressees in subscriber.csv """
-        report_string = "".join(self.report_lines)
-        mail_header = f"Subject:Summary of changes for {self.airport} {self.type} files\n\n"
-        message = mail_header + report_string
-        my_email = 'bru15septest@gmail.com'
-        my_password = 'panuy302421'
-        connection = smtplib.SMTP('smtp.gmail.com')
-        connection.starttls()
-        connection.login(user=my_email, password=my_password)
-        connection.sendmail(
-            from_addr=my_email,
-            to_addrs=subscribers,
-            msg=message)
-        connection.close()
+        # # Send email with report lines to all addressees in subscriber.csv
+        # report_string = "".join(self.report_lines)
+        # mail_header = f"Subject:Summary of changes for {self.airport} {self.type} files\n\n"
+        # message = mail_header + report_string
+        # my_email = 'bru15septest@gmail.com'
+        # my_password = 'panuy302421'
+        # connection = smtplib.SMTP('smtp.gmail.com')
+        # connection.starttls()
+        # connection.login(user=my_email, password=my_password)
+        # connection.sendmail(
+        #     from_addr=my_email,
+        #     to_addrs=subscribers,
+        #     msg=message)
+        # connection.close()

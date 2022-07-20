@@ -1,6 +1,5 @@
 import datetime as dt
 import requests as req
-import csv
 import os
 
 
@@ -8,7 +7,7 @@ class Source:
     source_date = dt.date.today().strftime("%Y%m%d")  # Current date when source is acquired
 
     def getSource(self, url):
-        '''Uses headers and data entries to access airservices website and retrieve the requested information'''
+        # Uses headers and data entries to access airservices website and retrieve the requested information
         headers = {
             'Connection': 'keep-alive',
             'Cache-Control': 'max-age=0',
@@ -76,6 +75,7 @@ class DAPfile(Source):
             filepath = os.path.join(path, filename)
             with open(filepath, 'wb') as file:
                 file.write(response.content)
+            print(f">> {filename}")
 
 
 class ERSAhtml(HTML):
