@@ -10,7 +10,7 @@ class Update:
             self.file_type,
             source_html.html,
             paths.path_dict['listing_current'],
-            source_html.pub_date,
+            source_html.current_date,
             airport,
         )
         for entry in source_listing.entries:
@@ -22,7 +22,7 @@ class Update:
             paths.path_dict['pdf_current'],
             self.file_type,
             airport,
-            source_html.pub_date,
+            source_html.current_date,
         )
 
 

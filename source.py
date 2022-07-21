@@ -37,15 +37,19 @@ class Source:
 
 class HTML(Source):
     def getPubDateCycle(self, airac, column):
-        '''Retrieves the relevant publication date of the source, based on current time and published publication schedule'''
-        '''See readme.md for more information'''
+        # Retrieves the relevant publication date of the source, based on current time and published publication schedule
+        # See readme.md for more information'''
         for row in airac:
             if int(row[1]) < int(self.source_date) and row[column] != '':
-                self.pub_date = str(row[1])
-                self.pub_cycle = str(row[column])
+                self.current_date = str(row[1])
+                self.current_cycle = str(row[column])
+        for row in reversed(airac):
+            if int(row[1]) > int(self.source_date) and row[column] != '':
+                self.pending_date = str(row[1])
+                self.pending_cycle = str(row[column])
 
     def saveSource(self, path):
-        filename = f"{self.pub_date}_{self.type}_{self.pub_cycle}.html"
+        filename = f"{self.current_date}_{self.type}_{self.current_cycle}.html"
         self.html = os.path.join(path, filename)
         if filename in os.listdir(path):
             pass
@@ -83,7 +87,7 @@ class ERSAhtml(HTML):
         self.type = "ERSA"
         self.pub_cycle_column = 4
         self.getPubDateCycle(airac, self.pub_cycle_column)
-        self.url = f"https://www.airservicesaustralia.com/aip/aip.asp?pg=40&vdate={self.pub_cycle}&ver=1"
+        self.url = f"https://www.airservicesaustralia.com/aip/aip.asp?pg=40&vdate={self.current_cycle}&ver=1"
         self.saveSource(path)
 
 
