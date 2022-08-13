@@ -1,12 +1,12 @@
 import compare_notify
 import csv
-import environment
+import paths
 import update
 
 
 # Set up all required folders and file paths
 print("Setting up folder and file paths")
-paths = environment.Paths()
+paths = paths.Paths()
 
 # Read list of aerodromes to be processed
 print("Reading aerodrome names")
