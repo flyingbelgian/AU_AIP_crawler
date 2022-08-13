@@ -9,37 +9,33 @@ class Paths:
         self.subscribers = os.path.join(self.root_path, "subscribers.csv")
         self.path_names = [
             "html_archive",
-            "files_list_archive",
-            "files_list_current",
+            "listing_archive",
+            "listing_current",
             "pdf_archive",
             "pdf_current",
             "pdf_archive_raw",
             "report_archive",
         ]
-        self.paths_list = {}
+        self.path_dict = {}
         for path in self.path_names:
-            path_data = self.init_addPath(path)
-            self.paths_list[path_data[0]] = path_data[1]
-        print("Moving last cycle's files to archive folders")
-        self.init_archiveFiles(self.paths_list['files_list_current'], self.paths_list['files_list_archive'])
-        self.init_archiveFiles(self.paths_list['pdf_current'], self.paths_list['pdf_archive'])
-        
-    def init_addPath(self, path_name):
-        ''' Checks to see if required directory exists, creates it if it doesn't exist '''
+            path_data = self.addPath(path)
+            self.path_dict[path_data[0]] = path_data[1]
+
+    def addPath(self, path_name):
+        """ Checks to see if required directory exists, creates it if it doesn't exist """
         full_path = os.path.join(self.root_path, path_name)
         if not os.path.isdir(full_path):
             os.mkdir(full_path)
         return [path_name, full_path]
 
-    def init_archiveFiles(self, current_path, archive_path):
-        ''' Move files from current folder to an archive folder '''
+    def archiveFiles(self, current_path, archive_path):
+        """ Move files from current folder to an archive folder """
         for file_name in os.listdir(current_path):
             current = os.path.join(current_path, file_name)
             archive = os.path.join(archive_path, file_name)
             os.replace(current, archive)
 
     def getLatestFile(self, type, airport, path):
-        ''' Used in main.py to compare previous cycle against current cycle '''
         file_list = [file for file in os.listdir(path) if type in file if airport in file]
         if file_list == []:
             print("No relevant file(s) in archive.")
