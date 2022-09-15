@@ -9,7 +9,7 @@ class Update:
         source_listing = self.getListing(
             self.file_type,
             source_html.html,
-            paths.path_dict['listing_current'],
+            paths.path_dict['file_list_current'],
             source_html.current_date,
             airport,
         )
