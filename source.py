@@ -55,8 +55,11 @@ class HTML(Source):
             pass
         else:
             response = self.getSource(self.url)
-            with open(self.html, 'w', encoding="utf-8") as file:
-                file.write(response.text)
+            if response.status_code == 404:
+                print(f"{filename} doesn't exist on server")
+            else:
+                with open(self.html, 'w', encoding="utf-8") as file:
+                    file.write(response.text)
 
 
 class DAPhtml(HTML):
