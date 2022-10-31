@@ -1,4 +1,4 @@
-import source_old
+import source
 import parser
 import output
 
@@ -28,13 +28,13 @@ class Update:
 
 class DAP(Update):
     file_type = "DAP"
-    getSource = source_old.DAPhtml
+    getSource = source.DAPhtml
     getListing = parser.DAPdata
-    getFile = source_old.DAPfile
+    getFile = source.DAPfile
 
 
 class ERSA(Update):
     file_type = "ERSA"
-    getSource = source_old.ERSAhtml
+    getSource = source.ERSAhtml
     getListing = parser.ERSAdata
-    getFile = source_old.ERSAfile
+    getFile = source.ERSAfile
