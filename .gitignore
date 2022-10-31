@@ -1,12 +1,9 @@
 __pycache__/
-file_list_archive/
-file_list_current/
 html_archive/
+html_temp/
+listing_archive/
+listing_current/
 pdf_archive/
 pdf_archive_raw/
 pdf_current/
 report_archive/
-source_archive/
-source_current/
-source_previous/
-AU_AIP_crawler/www.airservicesaustralia.com_aip_aip.html
