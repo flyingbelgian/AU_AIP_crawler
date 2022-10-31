@@ -24,6 +24,23 @@ class HTMLtoCSV:
         self.panda.to_csv(file_name, index=False, )
 
 
+# class sourceLinks(HTMLtoCSV):
+#     def getHTML(self, html_source):
+#         with open(html_source, 'r') as file:
+#             source_lines = file.readlines()
+#         relevant = False
+#         relevant_lines = []
+#         for line in source_lines:
+#             if "<li><a href=" in line:
+#                 relevant = True
+#             if relevant:
+#                 relevant_lines.append(line)
+#         print(relevant_lines)
+#         return
+
+
+
+
 class DAPdata(HTMLtoCSV):
     def getHTML(self, html_source):
         with open(html_source, 'r') as file:
