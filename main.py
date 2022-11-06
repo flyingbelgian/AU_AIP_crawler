@@ -14,6 +14,9 @@ with open(paths.aerodromes, 'r') as file:
 
 import source
 
+for airport in airports:
+    source.getDAPfiles(airport)
+
 # # Read list of airac dates and cycles
 # print("Reading AIRAC cycle dates")
 # with open(paths.airac, 'r') as file:

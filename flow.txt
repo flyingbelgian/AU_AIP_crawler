@@ -23,3 +23,15 @@ Per Airport:
         - Output.py
             - Generate combined pdf from all files based on AD, Type & date
             
+
+
+Prep:
+    - Set up folders to ensure all required file locations are available
+    - Archive previously downloaded files
+    - User selects aerodrome.csv file
+    - Read in list of aerodromes
+    - Read in available resources (types and dates)
+    - 
+
+Todo:
+    - execute option to allow use of preset aerodromes file to allow scheduled running
