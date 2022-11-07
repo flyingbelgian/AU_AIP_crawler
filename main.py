@@ -1,7 +1,6 @@
-import compare_notify
-import csv
+# import csv
+import output
 import paths
-import update
 
 # Set up all required folders and file paths
 print("Setting up folder and file paths")
@@ -15,14 +14,14 @@ with open(paths.aerodromes, 'r') as file:
 import source
 
 for airport in airports:
-    source.getDAPfiles(airport)
+    ### Download all files and get file listings for all types and cycles found
+    DAPfiles = source.getDAPfiles(airport)
+    for cycle in DAPfiles:
+        output.combinePDF(airport,"DAP",cycle)
+    ERSAfiles = source.getERSAfiles(airport)
+    for cycle in ERSAfiles:
+        output.combinePDF(airport,"ERSA",cycle)
 
-# # Read list of airac dates and cycles
-# print("Reading AIRAC cycle dates")
-# with open(paths.airac, 'r') as file:
-#     airac_source = csv.reader(file)
-#     next(airac_source)
-#     airac = [line for line in airac_source]
 
 
 

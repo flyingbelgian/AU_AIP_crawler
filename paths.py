@@ -11,16 +11,16 @@ class Paths:
         # self.airac = askopenfilename(title="Select csv file containing AIRAC cycles")
         # self.subscribers = askopenfilename(title="Select csv containing subscriver emails")
         self.path_names = [
+            "pdf_archive_raw",
             "pdf_archive",
-            "pdf_current",
-            "pdf_archive_raw"
+            "pdf_latest"
          ]
         self.path_dict = {}
         for path in self.path_names:
             path_data = self.init_addPath(path)
             self.path_dict[path_data[0]] = path_data[1]
         print("Moving last cycle's files to archive folders")
-        self.init_archiveFiles(self.path_dict['pdf_current'], self.path_dict['pdf_archive'])
+        self.init_archiveFiles(self.path_dict['pdf_latest'], self.path_dict['pdf_archive'])
 
     def init_addPath(self, path_name):
         """ Checks to see if required directory exists, creates it if it doesn't exist """

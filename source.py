@@ -43,7 +43,7 @@ def getSource(url):
 rootURL = "https://www.airservicesaustralia.com/aip/"
 
 ### Generates a list of lines containing links on the AIP website top level page.
-print(f"Getting content from AIP top level site.")
+print(f"Getting listings from AIP top level site.")
 AIP_URL = "aip.asp?pg=10"
 AIP_src_raw = getSource(f"{rootURL}{AIP_URL}").text
 AIP_source_lines = AIP_src_raw.splitlines()
@@ -72,7 +72,7 @@ for data in AIP_link_data:
     log.debug(f" - {data['type']} - {data['date']} - {data['link']}")
 
 #################### DAP ####################
-### Identifies currently available DAP cycles
+### Identifies currently available DAP cycles and generates list of links to each cycle's file listing
 DAP_menu_links = []
 for data in AIP_link_data:
     if "(DAP)" in data['type']:
@@ -96,7 +96,8 @@ for item in DAP_menu_links:
 ###
 
 def getDAPfiles(airport):
-    ### Downloads all DAP files for a given aerodrome
+    ### Downloads all DAP files for a given aerodrome and generates list of files in each cycle
+    ### Returns list with cycle number and file listing
     log.getLogger('chardet').propagate = False
     os.chdir("pdf_archive_raw")
     DAP_file_listings = [] # Track cycles with their file listings
@@ -132,79 +133,80 @@ def getDAPfiles(airport):
                 print("Existing File")
                 pass
             else:
-                print("Downloading ... ", end="")
+                log.debug(f"Downloading {DAPcycle_file['url']}")
                 response = getSource(DAPcycle_file["url"])
-                with open(DAPcycle_file["file"], 'w', encoding="utf-8") as file:
-                    file.write(response.text)
-                print("Done")
+                with open(DAPcycle_file["file"], 'wb') as file:
+                    file.write(response.content)
+                print("Downloaded")
             DAP_filecount += 1
         DAP_file_listings.append({
-            "DAPcycle":DAP_menu_link["cycle"],
-            "DAPcycle_files":DAPcycle_files
+            "cycle":DAP_menu_link["cycle"],
+            "date":DAP_menu_link["date"],
+            "files":DAPcycle_files
             })
     log.getLogger('chardet').propagate = True
     os.chdir("../")
     return DAP_file_listings
 
 #################### ERSA ####################
-# ### Generates a CSV named ERSA_links.csv containing currently available DAP cycles
-# ### with link extensions and dates
-# ERSAcycles = []
-# with open (AIP_links_file, 'r') as file:
-#     links = file.readlines()
-#     for line in links:
-#         if "(ERSA)" in line:
-#             relevant_line = line[:-1].split(",")
-#             ERSAcycles.append(relevant_line)
-#             print(f"Found ERSA dated {relevant_line[2]}")
+### Identifies currently available ERSA cycles and generates list of links to each cycle's file listing
+ERSA_menu_links = []
+for data in AIP_link_data:
+    if "(ERSA)" in data["type"]:
+        print(f"Found ERSA listing for {data['date']}")
+        ERSA_listing_link = rootURL + data['link']
+        ERSA_date = data['date']
+        ERSA_menu_links.append({
+            "link":ERSA_listing_link,
+            "date":ERSA_date,
+            })
+### Debugging info printed to logfile
+log.debug(f"Identified {len(ERSA_menu_links)} ERSA listing links:")
+for item in ERSA_menu_links:
+    log.debug(f" - {item['date']} - {item['link']}")
+###
 
-# def getDAPcontent(date):
-#     class HTML(Source):
-#     def getPubDateCycle(self, airac, column):
-#         # Retrieves the relevant publication date of the source, based on current time and published publication schedule
-#         # See readme.md for more information'''
-#         for row in airac:
-#             if int(row[1]) < int(self.source_date) and row[column] != '':
-#                 self.current_date = str(row[1])
-#                 self.current_cycle = str(row[column])
-#         for row in reversed(airac):
-#             if int(row[1]) > int(self.source_date) and row[column] != '':
-#                 self.pending_date = str(row[1])
-#                 self.pending_cycle = str(row[column])
-
-#     def saveSource(self, path):
-#         filename = f"{self.current_date}_{self.type}_{self.current_cycle}.html"
-#         self.html = os.path.join(path, filename)
-#         if filename in os.listdir(path):
-#             pass
-#         else:
-#             response = self.getSource(self.url)
-#             if response.status_code == 404:
-#                 print(f"{filename} doesn't exist on server")
-#             else:
-#                 with open(self.html, 'w', encoding="utf-8") as file:
-#                     file.write(response.text)
-
-
-# class DAPhtml(HTML):
-#     def __init__(self, airac, path):
-#         self.path = path
-#         self.type = "DAP"
-#         self.pub_cycle_column = 5
-#         self.getPubDateCycle(airac, self.pub_cycle_column)
-#         self.url = "https://www.airservicesaustralia.com/aip/current/dap/AeroProcChartsTOC.htm"
-#         self.saveSource(self.path)
-
-
-# class DAPfile(Source):
-#     def __init__(self, path, filename):
-#         if filename in os.listdir(path):
-#             pass
-#         else:
-#             url = f"https://www.airservicesaustralia.com/aip/current/dap/{filename}"
-#             response = self.getSource(url)
-#             filepath = os.path.join(path, filename)
-#             with open(filepath, 'wb') as file:
-#                 file.write(response.content)
-#             print(f">> {filename}")
-
+def getERSAfiles(airport):
+    ### Downloads all ERSA files for a given aerodrome and generates list of files in each cycle
+    ### Returns list with cycle dates and file listings
+    log.getLogger('chardet').propagate = False
+    os.chdir("pdf_archive_raw")
+    ERSA_file_listings = [] # Track cycles with their file listings
+    for ERSA_menu_link in ERSA_menu_links:
+        ### Downloads all files from each of the links found
+        print(f"Downloading ERSA files for {airport} dated {ERSA_menu_link['date']}")
+        ERSAcycle_files = [] # Track all files downloaded per cycle
+        ERSAcycle_URLroot = rootURL[:-5]
+        all_lines = getSource(ERSA_menu_link['link']).text.splitlines()
+        relevant_lines = []
+        for line in all_lines:
+            ### Records all lines that have the airport mentioned in them
+            if airport in line:
+                relevant_lines.append(line)
+        for line in relevant_lines:
+            ### Read type and filename from relevant lines
+            name = line.split('pdf">')[1].split("</a>")[0]
+            link = line.split('<a href="')[1].split('">')[0]
+            url = ERSAcycle_URLroot + link
+            file = link.split('ersa/')[1].split('"')[0]
+            ERSAcycle_files.append({"name":name, "file":file, "url":url})
+        ERSA_filecount = 1
+        for ERSAcycle_file in ERSAcycle_files:
+            print(f"  {ERSA_filecount}/{len(ERSAcycle_files)} : {ERSAcycle_file['file']} - ", end="")
+            if ERSAcycle_file["file"] in os.listdir():
+                print("Existing File")
+                pass
+            else:
+                log.debug(f"Downloading {ERSAcycle_file['url']}")
+                response = getSource(ERSAcycle_file["url"])
+                with open(ERSAcycle_file["file"], 'wb') as file:
+                    file.write(response.content)
+                print("Downloaded")
+            ERSA_filecount += 1
+        ERSA_file_listings.append({
+            "date":ERSA_menu_link["date"],
+            "files":ERSAcycle_files
+            })
+    log.getLogger('chardet').propagate = True
+    os.chdir("../")
+    return ERSA_file_listings
