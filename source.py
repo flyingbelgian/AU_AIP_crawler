@@ -97,54 +97,70 @@ for item in DAP_menu_links:
 
 def getDAPfiles(airport):
     ### Downloads all DAP files for a given aerodrome and generates list of files in each cycle
-    ### Returns list with cycle number and file listing
-    log.getLogger('chardet').propagate = False
+    ### Returns library with cycle number and file library for each cycle
     os.chdir("pdf_archive_raw")
     DAP_file_listings = [] # Track cycles with their file listings
     for DAP_menu_link in DAP_menu_links:
-        ### Downloads all files from each of the links found
         print(f"Downloading DAP files for {airport} in DAP {DAP_menu_link['cycle']}", end=" ")
         print(f"dated {DAP_menu_link['date']}")
-        DAPcycle_files = [] # Track all files downloaded per cycle
+        ### Prepare file for tracking file changes between DAP cycles
+        changed_files=open(f"../pdf_latest/{airport}_DAP{DAP_menu_link['cycle']}_changes.txt", 'a')
+        changed_files.write(f"Following files changed in DAP{DAP_menu_link['cycle']} cycle:\n")
+        ###
         DAPcycle_URLroot = DAP_menu_link['link'].split("AeroProcChartsTOC")[0]
+        ### Generate list of files to be downloaded per cycle
+        DAPcycle_files = []
         all_lines = DAP_menu_link['html'].text.splitlines()
         relevant_lines = []
         relevant = False
         for line in all_lines:
-            ### Start recording lines when airport is mentioned, turn off when next airport starts
             if airport in line:
+                # Start recording all lines from when airport is first mentioned
                 relevant = True
             else:
-                if "text-align" in line: # Heading for next airport listing has "text-align" in it
+                # Stop recording at first mention of next airport
+                # Heading for next airport listing has "text-align" in it
+                if "text-align" in line:
                     relevant = False
-            ### Retain only those lines from previous filter that have a link in them
+            # Retain only those lines from previous filter that have a link in them
             if (relevant and "href" in line):
                 relevant_lines.append(line)
         for line in relevant_lines:
-            ### Read description and filename from relevant lines
+            # Read description, filename and url from relevant lines
             name = line.split("pdf>")[1].split("</a>")[0]
             file = line.split("<a href=")[1].split(">")[0]
             url = DAPcycle_URLroot + file
-            DAPcycle_files.append({"name":name, "file":file, "url":url})
-        DAP_filecount = 1
+            # Store information as library in list of files to be downloaded
+            DAPcycle_files.append({
+                "name":name,
+                "file":file,
+                "url":url
+                })
+        ### Download all the files in the list of files to be downloaded
+        DAP_filecount = 1 # Ticker to track number of files downloaded against total
         for DAPcycle_file in DAPcycle_files:
             print(f"  {DAP_filecount}/{len(DAPcycle_files)} : {DAPcycle_file['file']} - ", end="")
             if DAPcycle_file["file"] in os.listdir():
-                print("Existing File")
+                print("Existing File", end='')
                 pass
             else:
                 log.debug(f"Downloading {DAPcycle_file['url']}")
                 response = getSource(DAPcycle_file["url"])
                 with open(DAPcycle_file["file"], 'wb') as file:
                     file.write(response.content)
-                print("Downloaded")
+                print("Downloaded", end='')
+            if DAP_menu_link['cycle'] in DAPcycle_file['file']:
+                changed_files.write(f" > {DAPcycle_file['file']} - {DAPcycle_file['name']}\n")
+                print(' - New File added to list of changes for this cycle')
+            else:
+                print('')
             DAP_filecount += 1
+        changed_files.close()
         DAP_file_listings.append({
             "cycle":DAP_menu_link["cycle"],
             "date":DAP_menu_link["date"],
             "files":DAPcycle_files
             })
-    log.getLogger('chardet').propagate = True
     os.chdir("../")
     return DAP_file_listings
 
@@ -169,7 +185,6 @@ for item in ERSA_menu_links:
 def getERSAfiles(airport):
     ### Downloads all ERSA files for a given aerodrome and generates list of files in each cycle
     ### Returns list with cycle dates and file listings
-    log.getLogger('chardet').propagate = False
     os.chdir("pdf_archive_raw")
     ERSA_file_listings = [] # Track cycles with their file listings
     for ERSA_menu_link in ERSA_menu_links:
@@ -207,6 +222,5 @@ def getERSAfiles(airport):
             "date":ERSA_menu_link["date"],
             "files":ERSAcycle_files
             })
-    log.getLogger('chardet').propagate = True
     os.chdir("../")
     return ERSA_file_listings
