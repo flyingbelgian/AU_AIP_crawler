@@ -2,8 +2,10 @@
 Automatically download updated AU AIP data
 
 Required modules (install these with pip install):
+- beautifulsoup4
+- csv (no longer required, included with Python install)
 - datetime
-- os
+- os (no longer required, included with Python install)
 - PyMuPDF
 - requests
 
