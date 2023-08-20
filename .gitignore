@@ -1,1 +1,12 @@
 __pycache__/
+.*/
+.*
+*.log
+file_list_archive/
+file_list_current/
+html_archive/
+pdf_archive/
+pdf_archive_raw/
+pdf_current/
+pdf_latest/
+report_archive/

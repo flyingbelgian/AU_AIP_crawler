@@ -8,7 +8,7 @@ import requests as req
 currentDate = dt.date.today().strftime("%Y%m%d")
 
 ### Setup log file, opening it once to ensure an empty log file on each run
-logfile = f"log_source_{currentDate}.txt"
+logfile = f"log_source_{currentDate}.log"
 with open(logfile, 'w'):
     pass
 log.basicConfig(filename=logfile, level=log.DEBUG)
@@ -108,6 +108,7 @@ def getDAPfiles(airport):
         changed_files.write(f"Following files changed in DAP{DAP_menu_link['cycle']} cycle:\n")
         ###
         DAPcycle_URLroot = DAP_menu_link['link'].split("AeroProcChartsTOC")[0]
+        log.debug(f"DAPcycle URL root: {DAPcycle_URLroot}")
         ### Generate list of files to be downloaded per cycle
         DAPcycle_files = []
         all_lines = DAP_menu_link['html'].text.splitlines()
@@ -117,18 +118,26 @@ def getDAPfiles(airport):
             if airport in line:
                 # Start recording all lines from when airport is first mentioned
                 relevant = True
+                log.debug(f"Start of relevant lines for {airport} DAP links: {line}")
             else:
                 # Stop recording at first mention of next airport
                 # Heading for next airport listing has "text-align" in it
                 if "text-align" in line:
                     relevant = False
+                    # log.debug(f"Stop of relevant lines for {airport} DAP links: {line}")
             # Retain only those lines from previous filter that have a link in them
             if (relevant and "href" in line):
                 relevant_lines.append(line)
+                log.debug(f"Relevant lines added: {line}")
         for line in relevant_lines:
             # Read description, filename and url from relevant lines
-            name = line.split("pdf>")[1].split("</a>")[0]
-            file = line.split("<a href=")[1].split(">")[0]
+            # Test for quotation marks in href block
+            if 'href="' in line:
+                quotes='"'
+            else:
+                quotes=''
+            name = line.split(f'pdf{quotes}>')[1].split("</a>")[0]
+            file = line.split(f'<a href={quotes}')[1].split(f'{quotes}>')[0]
             url = DAPcycle_URLroot + file
             # Store information as library in list of files to be downloaded
             DAPcycle_files.append({
