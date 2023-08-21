@@ -1,28 +1,26 @@
 import os
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 
+Tk().withdraw() ### Prevents GUI from displaying root window
 
 class Paths:
     def __init__(self):
         self.root_path = os.getcwd()
-        self.aerodromes = os.path.join(self.root_path, "aerodromes.csv")
-        self.airac = os.path.join(self.root_path, "AIRAC.csv")
-        self.subscribers = os.path.join(self.root_path, "subscribers.csv")
+        self.aerodromes = askopenfilename(title="Select csv file containe Aerodrome codes")
+        # self.airac = askopenfilename(title="Select csv file containing AIRAC cycles")
+        # self.subscribers = askopenfilename(title="Select csv containing subscriver emails")
         self.path_names = [
-            "html_archive",
-            "file_list_archive",
-            "file_list_current",
-            "pdf_archive",
-            "pdf_current",
             "pdf_archive_raw",
-            "report_archive",
-        ]
+            "pdf_archive",
+            "pdf_latest"
+         ]
         self.path_dict = {}
         for path in self.path_names:
             path_data = self.init_addPath(path)
             self.path_dict[path_data[0]] = path_data[1]
         print("Moving last cycle's files to archive folders")
-        self.init_archiveFiles(self.path_dict['file_list_current'], self.path_dict['file_list_archive'])
-        self.init_archiveFiles(self.path_dict['pdf_current'], self.path_dict['pdf_archive'])
+        self.init_archiveFiles(self.path_dict['pdf_latest'], self.path_dict['pdf_archive'])
 
     def init_addPath(self, path_name):
         """ Checks to see if required directory exists, creates it if it doesn't exist """
@@ -51,4 +49,3 @@ class Paths:
     #         file_list.sort(reverse=True)
     #         file_path = os.path.join(path, file_list[0])
     #         return file_path
-     
