@@ -38,7 +38,11 @@ def getSource(url):
         'Submit': 'I Agree',
         'check': '1'
     }
-    return req.get(url, headers=headers, data=data)
+    try:
+        response = req.get(url, headers=headers, data=data)
+    except req.exceptions.ConnectionError:
+        response = req.get(url, headers=headers, data=data)
+    return response
 
 rootURL = "https://www.airservicesaustralia.com/aip/"
 
@@ -74,21 +78,46 @@ for data in AIP_link_data:
 #################### DAP ####################
 ### Identifies currently available DAP cycles and generates list of links to each cycle's file listing
 DAP_menu_links = []
+DAP_count = 1
 for data in AIP_link_data:
     if "(DAP)" in data['type']:
         print(f"Found DAP listing for {data['date']}")
-        DAP_menu_html = getSource(f"{rootURL}{data['link']}").text
-        for line in DAP_menu_html.splitlines():
-            if "Charts" in line:
-                DAP_listing_link = rootURL + line.split('href="',1)[1].split('">',1)[0]
-                DAP_listing_html = getSource(DAP_listing_link)
-                DAP_cycle = DAP_listing_html.text.split("DAP ",1)[1].split(" - ",1)[0]
-                DAP_menu_links.append({
-                    "link":DAP_listing_link,
-                    "date":data['date'],
-                    "cycle":DAP_cycle,
-                    "html":DAP_listing_html
-                    })
+        # DAP_menu_html = getSource(f"{rootURL}{data['link']}").text
+        # f = open("DAP_menu_html.txt","w")
+        # f.write(DAP_menu_html)
+        # f.close()
+        # with open ("DAP_menu_html.txt","r") as file:
+        #     content = file.read()
+        #     for line in content.splitlines():
+        #         # print(line)
+        #         if "Charts" in line:
+        #             DAP_listing_link = rootURL + line.split('href="',1)[1].split('">',1)[0]
+        #             DAP_listing_html = getSource(DAP_listing_link)
+        #             DAP_cycle = DAP_listing_html.text.split("DAP ",1)[1].split(" - ",1)[0]
+        #             DAP_menu_links.append({
+        #                 "link":DAP_listing_link,
+        #                 "date":data['date'],
+        #                 "cycle":DAP_cycle,
+        #                 "html":DAP_listing_html
+        #                 })
+        DAP_listing_link = rootURL
+        if DAP_count == 1:
+            DAP_listing_link += "current/dap/"
+        elif DAP_count == 2:
+            DAP_listing_link += "pending/dap/"
+        else:
+            print("Invalid DAP count")
+            quit()
+        DAP_listing_html = getSource(rootURL+data['link'])
+        log.debug(DAP_listing_html)
+        DAP_cycle =  DAP_listing_html.text.split("DAP ",1)[1].split(" - ",1)[0]
+        DAP_menu_links.append({
+            "link":DAP_listing_link,
+            "date":data['date'],
+            "cycle":DAP_cycle,
+            "html":DAP_listing_html
+            })
+        DAP_count += 1
 ### Debugging info printed to logfile
 log.debug(f"Identified {len(DAP_menu_links)} DAP listing links:")
 for item in DAP_menu_links:
@@ -136,8 +165,8 @@ def getDAPfiles(airport):
                 quotes='"'
             else:
                 quotes=''
-            name = line.split(f'pdf{quotes}>')[1].split("</a>")[0]
-            file = line.split(f'<a href={quotes}')[1].split(f'{quotes}>')[0]
+            name = line.split(f'.pdf{quotes}>')[1].split("</a>")[0]
+            file = line.split(f'href={quotes}')[1].split(f'{quotes}>')[0]
             url = DAPcycle_URLroot + file
             # Store information as library in list of files to be downloaded
             DAPcycle_files.append({
